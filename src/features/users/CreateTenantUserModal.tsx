@@ -24,7 +24,7 @@ export default function CreateTenantUserModal({ onClose, onCreated }: Props) {
     e.preventDefault();
     setLoading(true);
     try {
-      await api.post("/users/", form);
+      await api.post("/setup/tenantuser", form);
       onCreated(); // refresh list or show message
       onClose();   // close modal
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
