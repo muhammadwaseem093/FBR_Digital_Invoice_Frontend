@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../../api/axios";
+import { getToken } from "../../auth/token";
 
 interface Props {
   onClose: () => void;
@@ -21,19 +22,31 @@ export default function CreateTenantUserModal({ onClose, onCreated }: Props) {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      await api.post("/setup/tenantuser", form);
-      onCreated(); // refresh list or show message
-      onClose();   // close modal
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err) {
-      alert("Failed to create tenant user.");
-    } finally {
-      setLoading(false);
+  e.preventDefault();
+  setLoading(true);
+
+  try {
+    const token = getToken();
+    if (!token) {
+      alert("You are not authorized. Please log in again.");
+      return;
     }
-  };
+
+    await api.post("/setup/tenantuser", form, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    onCreated(); // refresh list or show message
+    onClose();   // close modal
+  } catch (err) {
+    console.error("Create Tenant Error →", err);
+    alert("Failed to create tenant user.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="fixed inset-0 bg-white bg-opacity-30 backdrop-blur-sm z-50 flex items-center justify-center">
