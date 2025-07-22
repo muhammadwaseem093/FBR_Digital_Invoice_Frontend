@@ -16,13 +16,18 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [settingsDropdownOpen, setSettingsDropdownOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
 
   const chartData = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    datasets: [{ label: "Invoices", backgroundColor: "#8b5cf6", data: [12, 19, 7, 15, 10, 20] }],
+    datasets: [
+      {
+        label: "Invoices",
+        backgroundColor: "#8b5cf6",
+        data: [12, 19, 7, 15, 10, 20],
+      },
+    ],
   };
 
   const handleLogout = () => {
@@ -32,7 +37,10 @@ export default function Dashboard() {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(e.target as Node)
+      ) {
         setProfileDropdownOpen(false);
       }
     };
@@ -43,28 +51,52 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="flex justify-between items-center bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white p-4 shadow">
-        
         <div className="flex items-center gap-4">
           <h1 className="text-2xl font-bold">📄 Digital Invoice</h1>
           <nav className="flex gap-4">
-            <button onClick={() => navigate("/dashboard")} className="hover:underline">Dashboard</button>
-            <div className="relative">
-              <button onClick={() => setSettingsDropdownOpen(!settingsDropdownOpen)} className="hover:underline flex items-center gap-1">
-                Settings
-              </button>
-              <div className={`absolute bg-white text-black right-0 mt-2 shadow-lg rounded w-48 z-10 overflow-hidden transition-all duration-300 ${settingsDropdownOpen ? "max-h-60 opacity-100" : "max-h-0 opacity-0"}`}>
-                <button onClick={() => { navigate("/settings"); setSettingsDropdownOpen(false); }} className="block w-full px-4 py-2 hover:bg-gray-100 text-left">Create API Credential</button>
-                <button onClick={() => { navigate("/credential-status"); setSettingsDropdownOpen(false); }} className="block w-full px-4 py-2 hover:bg-gray-100 text-left">View API</button>
-              </div>
-            </div>
+            <button
+              onClick={() => navigate("/dashboard")}
+              className="hover:underline"
+            >
+              Dashboard
+            </button>
+            <button
+              onClick={() => navigate("/fbr-tokens")}
+              className="hover:underline"
+            >
+              FBR Tokens
+            </button>
           </nav>
         </div>
 
         <div className="relative" ref={profileRef}>
-          <FaUserCircle size={28} className="cursor-pointer" onClick={() => setProfileDropdownOpen(!profileDropdownOpen)} />
-          <div className={`absolute right-0 mt-2 bg-white text-black shadow-lg rounded w-40 z-20 transition-all duration-300 ${profileDropdownOpen ? "opacity-100 max-h-60" : "opacity-0 max-h-0 overflow-hidden"}`}>
-            <button onClick={() => { navigate("/settings"); setProfileDropdownOpen(false); }} className="block w-full px-4 py-2 hover:bg-gray-100 text-left">Profile Settings</button>
-            <button onClick={handleLogout} className="block w-full px-4 py-2 hover:bg-gray-100 text-left">Logout</button>
+          <FaUserCircle
+            size={28}
+            className="cursor-pointer"
+            onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+          />
+          <div
+            className={`absolute right-0 mt-2 bg-white text-black shadow-lg rounded w-40 z-20 transition-all duration-300 ${
+              profileDropdownOpen
+                ? "opacity-100 max-h-60"
+                : "opacity-0 max-h-0 overflow-hidden"
+            }`}
+          >
+            <button
+              onClick={() => {
+                navigate("/settings");
+                setProfileDropdownOpen(false);
+              }}
+              className="block w-full px-4 py-2 hover:bg-gray-100 text-left"
+            >
+              Profile Settings
+            </button>
+            <button
+              onClick={handleLogout}
+              className="block w-full px-4 py-2 hover:bg-gray-100 text-left"
+            >
+              Logout
+            </button>
           </div>
         </div>
       </header>
@@ -72,7 +104,12 @@ export default function Dashboard() {
       <div className="p-6">
         <div className="flex justify-between mb-6 items-center">
           <h2 className="text-xl font-bold">Welcome to Your Dashboard</h2>
-          <button onClick={() => navigate("/invoice")} className="bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white px-4 py-2 rounded shadow hover:scale-105 transition">+ Generate Invoice</button>
+          <button
+            onClick={() => navigate("/invoice")}
+            className="bg-gradient-to-r from-indigo-500 to-fuchsia-500 text-white px-4 py-2 rounded shadow hover:scale-105 transition"
+          >
+            + Generate Invoice
+          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
